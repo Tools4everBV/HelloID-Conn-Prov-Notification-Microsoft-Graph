@@ -1,5 +1,6 @@
 > [!IMPORTANT]
 > Please be aware that the notifications only can be triggered by events
+> 
 > See powershell notification system for more information (https://docs.helloid.com/en/provisioning/notifications--provisioning-/notification-systems--provisioning-/powershell-notification-systems--provisioning-.html)
 | :information_source: Information |
 |:---------------------------|
