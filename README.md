@@ -9,7 +9,6 @@
 ## Versioning
 | Version | Description | Date |
 | - | - | - |
-| 1.1.0   | Updated with new logging and added license management | 2022/07/12  |
 | 1.0.0   | Initial release | 2021/07/30  |
 
 <!-- TABLE OF CONTENTS -->
