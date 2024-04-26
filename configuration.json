@@ -1,0 +1,44 @@
+[
+  {
+    "key": "AADtenantID",
+    "type": "input",
+    "defaultValue": "",
+    "templateOptions": {
+      "label": "Azure AD Tenant ID",
+      "placeholder": "1234j678-123v4-4a3c-abcd-241t1q4m7f54",
+      "description": "",
+      "required": true
+    }
+  },
+  {
+    "key": "AADAppId",
+    "type": "input",
+    "defaultValue": "",
+    "templateOptions": {
+      "label": "Azure AD App ID",
+      "placeholder": "9c15a9b1-21g75-678d-zy34-8a790199d46d",
+      "description": "",
+      "required": true
+    }
+  },
+  {
+    "key": "AADAppSecret",
+    "type": "input",
+    "defaultValue": "",
+    "templateOptions": {
+      "label": "Azure AD App Secret",
+      "type": "password",
+      "placeholder": "7lhb1234NwDvx.2kbf98M._r0yz_7u_A34",
+      "required": true
+    }
+  },
+  {
+    "key": "isDebug",
+    "type": "checkbox",
+    "defaultValue": false,
+    "templateOptions": {
+      "label": "Toggle debug logging",
+      "required": false
+    }
+  }
+]
