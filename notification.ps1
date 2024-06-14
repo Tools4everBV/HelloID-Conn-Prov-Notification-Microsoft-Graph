@@ -5,7 +5,7 @@
 #####################################################
 
 # Initialize default values
-$success = $false
+$outputContext.Success = $false
 
 # Enable TLS1.2
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::Tls12
@@ -106,7 +106,6 @@ if (-Not($actionContext.DryRun -eq $true)) {
 
             $sendMail = Invoke-RestMethod -Uri $sendMailUri -Method Post -Body $sendMailBody -Headers $authorization -Verbose:$false
 
-            # Write-Information "Succesfully sent mail to '$($mailTo)', CC '$($mailCC)', BCC '$($mailBCC)', with subject '$($mailSubject)'"
             $outputContext.AuditLogs.Add([PSCustomObject]@{
                     Message = "Sending notification [$($actionContext.TemplateConfiguration.scriptFlow)] for [$($personContext.Person.DisplayName)] was successful."
                     IsError = $false
@@ -121,14 +120,14 @@ if (-Not($actionContext.DryRun -eq $true)) {
                     Message = "Sending notification [$($actionContext.TemplateConfiguration.scriptFlow)] for [$($personContext.Person.DisplayName)] was unsuccessful reason [$($auditErrorMessage)]."
                     IsError = $true
                 })
-            #throw "Error sending mail to '$($mailTo)', CC '$($mailCC)', BCC '$($mailBCC)', with subject '$($mailSubject)'. Error message: $($auditErrorMessage)"
+            
         }
         finally {
             # Check if auditLogs contains errors, if no errors are found, set success to true
             if (-NOT($outputContext.AuditLogs.isError -contains $true)) {
-                $success = $true
+                $outputContext.Success = $true
             }
-            $outputContext.Success = $success
+            
         }
     }
     
@@ -144,4 +143,3 @@ else {
             Message = "Sending notification [$($actionContext.TemplateConfiguration.scriptFlow)] for: [$($personContext.Person.DisplayName)], will be executed during enforcement"
         })
 }
-
