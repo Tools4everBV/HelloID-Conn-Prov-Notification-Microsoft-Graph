@@ -23,10 +23,10 @@
     "type": "input",
     "defaultValue": "",
     "templateOptions": {
-      "label": "Subject"
-       "placeholder": "Geef hier het onderwerp op van het bericht",
-      
-    }
+      "label": "Subject",
+       "placeholder": "Please enter email subject",
+       "required": true
+       }
   },
   {
     "key": "Body",
@@ -34,7 +34,7 @@
     "defaultValue": "",
     "templateOptions": {
       "label": "body",
-      "placeholder": "Geef hier de tekst op van het bericht",
+      "placeholder": "Please enter email message",
       "required": true,
       "rows": 5
     }
@@ -46,7 +46,7 @@
     "templateOptions": {
       "label": "Mailto",
       "type": "email",
-      "placeholder": "Please enter a email address",
+      "placeholder": "Please enter email address",
       "required": true
     }
   },
@@ -57,7 +57,7 @@
     "templateOptions": {
       "label": "MailCC",
       "type": "email",
-      "placeholder": "Please enter a email address",
+      "placeholder": "Please enter a cc email address",
       "required": false
     }
   },
@@ -68,7 +68,7 @@
     "templateOptions": {
       "label": "MailBCC",
       "type": "email",
-      "placeholder": "Please enter a email address",
+      "placeholder": "Please enter a bcc email address",
       "required": false
     }
   },
@@ -79,7 +79,7 @@
     "templateOptions": {
       "label": "Mailfrom",
       "type": "email",
-      "placeholder": "Please enter a email address",
+      "placeholder": "Please enter sender email address",
       "required": true
     }
   }
