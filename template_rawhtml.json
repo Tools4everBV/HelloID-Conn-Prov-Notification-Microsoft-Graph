@@ -1,0 +1,77 @@
+[
+  {
+    "key": "scriptFlow",
+    "type": "input",
+    "defaultValue": "rawhtml",
+    "templateOptions": {
+      "label": "Script flow",
+      "disabled": true
+    },
+    "hide": false
+  },
+  {
+    "key": "MailFrom",
+    "type": "input",
+    "defaultValue": "",
+    "templateOptions": {
+      "label": "Mailfrom",
+      "type": "email",
+      "placeholder": "Enter sender email address. Needs to be an existing mailbox in Office 365 (can be shared mailbox)",
+      "required": true
+    }
+  },
+  {
+    "key": "MailTo",
+    "type": "input",
+    "defaultValue": "{{Person.Contact.Personal.Email||\"fallbackMail\"}}",
+    "templateOptions": {
+      "label": "Mailto",
+      "type": "email",
+      "placeholder": "Enter email address, for multiple email addresses use ;",
+      "required": true
+    }
+  },
+  {
+    "key": "MailCC",
+    "type": "input",
+    "defaultValue": "",
+    "templateOptions": {
+      "label": "MailCC",
+      "type": "email",
+      "placeholder": "Enter a cc email address, for multiple email addresses use ;",
+      "required": false
+    }
+  },
+  {
+    "key": "MailBCC",
+    "type": "input",
+    "defaultValue": "",
+    "templateOptions": {
+      "label": "MailBCC",
+      "type": "email",
+      "placeholder": "Enter a bcc email address, for multiple email addresses use ;",
+      "required": false
+    }
+  },
+  {
+    "key": "Subject",
+    "type": "input",
+    "defaultValue": "",
+    "templateOptions": {
+      "label": "Subject",
+      "placeholder": "Please enter email subject",
+      "required": true
+    }
+  },
+  {
+    "key": "Body",
+    "type": "textarea",
+    "defaultValue": "",
+    "templateOptions": {
+      "label": "body",
+      "placeholder": "Please enter email message (raw html)",
+      "required": true,
+      "rows": 10
+    }
+  }
+]

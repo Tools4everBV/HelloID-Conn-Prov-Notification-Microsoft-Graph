@@ -1,101 +1,65 @@
-| :warning: Warning |
-|:---------------------------|
-| Please be aware that the current notifications only can be triggered by built-in events.  |
+# HelloID-Conn-Prov-Notification-Microsoft-Graph
 
 > [!IMPORTANT]
-> 
-> See powershell notification system for more information (https://docs.helloid.com/en/provisioning/notifications--provisioning-/notification-systems--provisioning-/powershell-notification-systems--provisioning-.html)
-> 
-| :information_source: Information |
-|:---------------------------|
-| This repository contains the connector and configuration code only. The implementer is responsible to acquire the connection details such as username, password, certificate, etc. You might even need to sign a contract or agreement with the supplier before implementing this connector. Please contact the client's application manager to coordinate the connector requirements.       |
-<br />
-<p align="center">
-  <img src="https://www.tools4ever.nl/connector-logos/azureactivedirectory-logo.png">
+> Please be aware that the notifications only can be triggered by [events](https://docs.helloid.com/en/provisioning/notifications--provisioning-/notification-events--provisioning-.html) and cannot be used as entitlements.
+
+> [!IMPORTANT]
+> This repository contains the connector and configuration code only. The implementer is responsible to acquire the connection details such as username, password, certificate, etc. You might even need to sign a contract or agreement with the supplier before implementing this connector. Please contact the client's application manager to coordinate the connector requirements.
+
+<p align="center"> 
+  <img src="https://raw.githubusercontent.com/Tools4everBV/HelloID-Conn-Prov-Notification-Microsoft-Graph/refs/heads/main/Logo.png">
 </p>
 
-## Versioning
-| Version | Description | Date |
-| - | - | - |
-| 1.0.0   | Initial release | 2021/07/30  |
-
-<!-- TABLE OF CONTENTS -->
 ## Table of Contents
-- [Versioning](#versioning)
-- [Table of Contents](#table-of-contents)
-- [Introduction](#introduction)
-- [Getting the Azure AD graph API access](#getting-the-azure-ad-graph-api-access)
-  - [Application Registration](#application-registration)
-  - [Configuring App Permissions](#configuring-app-permissions)
-  - [Authentication and Authorization](#authentication-and-authorization)
+
+- [HelloID-Conn-Prov-Notification-Microsoft-Graph](#helloid-conn-prov-notification-microsoft-graph)
+  - [Table of Contents](#table-of-contents)
+  - [Requirements](#requirements)
   - [Connection settings](#connection-settings)
-- [Remarks](#remarks)
-- [Getting help](#getting-help)
-- [HelloID Docs](#helloid-docs)
+  - [Templates](#templates)
+    - [rawhtml](#rawhtml)
+  - [Getting help](#getting-help)
+  - [HelloID Docs](#helloid-docs)
 
-## Introduction
-The interface to communicate with Microsoft Azure AD is through the Microsoft Graph API.
+## Requirements
 
-For this connector we have the option to correlate to existing Azure AD users and provision (dynamic) groupmemberships.
-  >__Currently only Microsoft 365 and Security groups are supported by the [Microsoft Graph API](https://docs.microsoft.com/en-us/graph/api/resources/groups-overview?view=graph-rest-1.0).<br>
-This means we cannot manage Mail-enabled security groups and Distribution groups, These can only be managed using the [Exchange Online connector](https://github.com/Tools4everBV/HelloID-Conn-Prov-Target-ExchangeOnline).__
+1. **HelloID Environment**:
+   - Set up your _HelloID_ environment.
+   - Install the _HelloID_ Provisioning agent (cloud or on-prem).
+1. **Graph API Credentials**:
+   - Create an **App Registration** in Microsoft Entra ID.
+   - Add API permissions for your app:
+     - **Microsoft Graph: Application permissions**:
+       - `Mail.Send`
+   - Create access credentials for your app:
+     - Create a **client secret** for your app.
 
-If you want to create Azure accounts, please use the built-in Microsoft Azure Active Directory target system.
+## Connection settings
 
-<!-- GETTING STARTED -->
-## Getting the Azure AD graph API access
-
-By using this connector you will have the ability to manage Azure AD Guest accounts.
-
-### Application Registration
-The first step to connect to Graph API and make requests, is to register a new <b>Azure Active Directory Application</b>. The application is used to connect to the API and to manage permissions.
-
-* Navigate to <b>App Registrations</b> in Azure, and select “New Registration” (<b>Azure Portal > Azure Active Directory > App Registration > New Application Registration</b>).
-* Next, give the application a name. In this example we are using “<b>HelloID PowerShell</b>” as application name.
-* Specify who can use this application (<b>Accounts in this organizational directory only</b>).
-* Specify the Redirect URI. You can enter any url as a redirect URI value. In this example we used http://localhost because it doesn't have to resolve.
-* Click the “<b>Register</b>” button to finally create your new application.
-
-Some key items regarding the application are the Application ID (which is the Client ID), the Directory ID (which is the Tenant ID) and Client Secret.
-
-### Configuring App Permissions
-The [Microsoft Graph documentation](https://docs.microsoft.com/en-us/graph) provides details on which permission are required for each permission type.
-
-To assign your application the right permissions, navigate to <b>Azure Portal > Azure Active Directory >App Registrations</b>.
-Select the application we created before, and select “<b>API Permissions</b>” or “<b>View API Permissions</b>”.
-To assign a new permission to your application, click the “<b>Add a permission</b>” button.
-From the “<b>Request API Permissions</b>” screen click “<b>Microsoft Graph</b>”.
-For this connector the following permissions are used as <b>Application permissions</b>:
-*	Allow the app to send mail by using <b><i>Mail.Send</i></b>
-
-Some high-privilege permissions can be set to admin-restricted and require an administrators consent to be granted.
-
-To grant admin consent to our application press the “<b>Grant admin consent for TENANT</b>” button.
-
-### Authentication and Authorization
-There are multiple ways to authenticate to the Graph API with each has its own pros and cons, in this example we are using the Authorization Code grant type.
-
-*	First we need to get the <b>Client ID</b>, go to the <b>Azure Portal > Azure Active Directory > App Registrations</b>.
-*	Select your application and copy the Application (client) ID value.
-*	After we have the Client ID we also have to create a <b>Client Secret</b>.
-*	From the Azure Portal, go to <b>Azure Active Directory > App Registrations</b>.
-*	Select the application we have created before, and select "<b>Certificates and Secrets</b>". 
-*	Under “Client Secrets” click on the “<b>New Client Secret</b>” button to create a new secret.
-*	Provide a logical name for your secret in the Description field, and select the expiration date for your secret.
-*	It's IMPORTANT to copy the newly generated client secret, because you cannot see the value anymore after you close the page.
-*	At last we need to get the <b>Tenant ID</b>. This can be found in the Azure Portal by going to <b>Azure Active Directory > Overview</b>.
-
-### Connection settings
 The following settings are required to connect to the API.
 
-| Setting     | Description |
-| ------------ | ----------- |
-| Azure AD Tenant ID | Id of the Azure tenant |
-| Azure AD App ID | Id of the Azure app |
-| Azure AD App Secret | Secret of the Azure app |
+| Setting                                  | Description                                                     | Mandatory |
+| ---------------------------------------- | --------------------------------------------------------------- | --------- |
+| App Registration Directory (tenant) ID   | The ID to the Tenant in Microsoft Entra ID                      | Yes       |
+| App Registration Application (client) ID | The ID to the App Registration in Microsoft Entra ID            | Yes       |
+| App Registration Client Secret           | The Client Secret to the App Registration in Microsoft Entra ID | Yes       |
 
-## Remarks
-- 
+## Templates
+### rawhtml
+The table below describes the different form fields from the template.
+
+| template key | Description                                                                                       | Mandatory |
+| ------------ | ------------------------------------------------------------------------------------------------- | --------- |
+| scriptFlow   | Fixed value "rawhtml" (read-only)                                                                 | Yes       |
+| MailFrom     | Enter sender email address. Needs to be an existing mailbox in Office 365 (can be shared mailbox) | Yes       |
+| MailTo       | Enter email address, for multiple email addresses use ;                                           | Yes       |
+| MailCC       | Enter a cc email address, for multiple email addresses use ;f                                     |           |
+| MailBCC      | Enter a bcc email address, for multiple email addresses use ;                                     |           |
+| Subject      | Please enter email subject                                                                        | Yes       |
+| Body         | Please enter email message (raw html)                                                             | Yes       |
+
+> [!NOTE]
+> If the `Body` textarea exceeds the [performance limits](https://docs.helloid.com/en/provisioning/performance-limits--provisioning-.html#notifications--performance-limits-), we recommend building your own template that includes HTML in the body using PowerShell.
 
 ## Getting help
 > _For more information on how to configure a HelloID PowerShell connector, please refer to our [documentation](https://docs.helloid.com/hc/en-us/articles/360012518799-How-to-add-a-target-system) pages_
