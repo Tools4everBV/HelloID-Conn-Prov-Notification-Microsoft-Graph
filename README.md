@@ -53,7 +53,7 @@ The table below describes the different form fields from the template.
 | scriptFlow   | Fixed value "rawhtml" (read-only)                                                                 | Yes       |
 | MailFrom     | Enter sender email address. Needs to be an existing mailbox in Office 365 (can be shared mailbox) | Yes       |
 | MailTo       | Enter email address, for multiple email addresses use ;                                           | Yes       |
-| MailCC       | Enter a cc email address, for multiple email addresses use ;f                                     |           |
+| MailCC       | Enter a cc email address, for multiple email addresses use ;                                      |           |
 | MailBCC      | Enter a bcc email address, for multiple email addresses use ;                                     |           |
 | Subject      | Please enter email subject                                                                        | Yes       |
 | Body         | Please enter email message (raw html)                                                             | Yes       |
