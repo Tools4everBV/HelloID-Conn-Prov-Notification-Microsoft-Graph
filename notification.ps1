@@ -1,9 +1,20 @@
 #####################################################
 # HelloID-Conn-Prov-Notification-GraphApi
+# PowerShell Notification System
 #####################################################
 
 # Enable TLS1.2
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::Tls12
+
+# Debug
+# if (($actionContext.DryRun -eq $true) -and ($actionContext.TemplateConfiguration.scriptFlow -eq 'rawhtml')) {
+#     $actionContext.TemplateConfiguration.MailFrom = 'noreply@helloid.com'
+#     $actionContext.TemplateConfiguration.MailTo = 'to@helloid.com;secondTo@helloid.com'
+#     $actionContext.TemplateConfiguration.MailCC = 'cc@helloid.com;secondCc@helloid.com'
+#     $actionContext.TemplateConfiguration.MailBCC = 'bcc@helloid.com;secondBcc@helloid.com'
+#     $actionContext.TemplateConfiguration.Subject = 'Debug subject HelloID'
+#     $actionContext.TemplateConfiguration.Body = 'Debug body HelloID'
+# }
 
 #region functions
 function Resolve-MicrosoftGraphAPIError {
@@ -93,14 +104,6 @@ try {
     switch ($actionContext.TemplateConfiguration.scriptFlow) {
         'rawhtml' {
             $actionMessage = "sending mail using scriptFlow [$($actionContext.TemplateConfiguration.scriptFlow)]"
-            
-            # Debug
-            # $actionContext.TemplateConfiguration.MailFrom = 'noreply@helloid.com'
-            # $actionContext.TemplateConfiguration.MailTo = 'to@helloid.com;secondTo@helloid.com'
-            # $actionContext.TemplateConfiguration.MailCC = 'cc@helloid.com;secondCc@helloid.com'
-            # $actionContext.TemplateConfiguration.MailBCC = 'bcc@helloid.com;secondBcc@helloid.com'
-            # $actionContext.TemplateConfiguration.Subject = 'Debug subject HelloID'
-            # $actionContext.TemplateConfiguration.Body = 'Debug body HelloID'
 
             $mailFrom = $actionContext.TemplateConfiguration.MailFrom # Needs to be an existing mailbox in Office 365 (can be shared mailbox)
             $mailTo = @($actionContext.TemplateConfiguration.MailTo -split ';' | Where-Object { $_ })
@@ -129,8 +132,6 @@ try {
                 Body    = ($sendMailBody | ConvertTo-Json -Depth 10)
                 Verbose = $false
             }
-
-            Write-Warning "$($splatPostParams.Body)"
 
             if (-not($actionContext.DryRun -eq $true)) {
                 $null = Invoke-RestMethod @splatPostParams
