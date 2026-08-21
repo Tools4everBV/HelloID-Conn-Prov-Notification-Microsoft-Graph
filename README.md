@@ -42,7 +42,7 @@ This connector sends email notifications through Microsoft 365 using the Microso
 URL of the icon used for the HelloID Provisioning notification system.
 
 ```
-https://raw.githubusercontent.com/Tools4everBV/HelloID-Conn-Prov-Notification-Microsoft-Graph/refs/heads/main/Logo.png
+https://raw.githubusercontent.com/Tools4everBV/HelloID-Conn-Prov-Notification-Microsoft-Graph/refs/heads/main/Icon.png
 ```
 
 ### Requirements
@@ -106,10 +106,6 @@ The table below describes the different form fields from the template.
 | MailBCC      | BCC recipient email address(es). Multiple addresses can be separated with semicolons (`;`). Supports HelloID template variables.| No        | audit@company.com                        |
 | Subject      | The email subject line. Supports HelloID template variables.                                                                    | Yes       | New Account - {{ person.name.nickName }} |
 | Body         | The email body content in raw HTML format. Supports HelloID template variables. Maximum 2063 characters.                        | Yes       | `<p>Hello {{ person.primaryManager.displayName }},</p>` |
-
-| :warning: Important |
-|:---|
-| Please keep in mind that the key form field names in the templates are used in the notification.ps1. Changing them will break the connector. |
 
 | :bulb: Tip |
 |:---|
