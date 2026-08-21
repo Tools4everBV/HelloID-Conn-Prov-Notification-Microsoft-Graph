@@ -33,4 +33,6 @@ This is the first official release of HelloID-Conn-Prov-Notification-Microsoft-G
 
 ### Fixed
 
+- Email addresses are now trimmed when splitting multiple recipients (To, CC, BCC fields). This prevents leading/trailing whitespace from causing invalid email addresses when users enter addresses like `email1@test.com; email2@test.com` (with space after semicolon)
+
 ### Removed

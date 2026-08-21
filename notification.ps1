@@ -395,9 +395,9 @@ try {
             $actionMessage = "sending mail using scriptFlow [$($actionContext.TemplateConfiguration.scriptFlow)]"
 
             $mailFrom = $actionContext.TemplateConfiguration.MailFrom # Needs to be an existing mailbox in Office 365 (can be shared mailbox)
-            $mailTo = @($actionContext.TemplateConfiguration.MailTo -split ';' | Where-Object { $_ })
-            $mailCC = @($actionContext.TemplateConfiguration.MailCC -split ';' | Where-Object { $_ })
-            $mailBCC = @($actionContext.TemplateConfiguration.MailBCC -split ';' | Where-Object { $_ })
+            $mailTo = @($actionContext.TemplateConfiguration.MailTo -split ';' | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+            $mailCC = @($actionContext.TemplateConfiguration.MailCC -split ';' | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+            $mailBCC = @($actionContext.TemplateConfiguration.MailBCC -split ';' | ForEach-Object { $_.Trim() } | Where-Object { $_ })
             $mailSubject = $actionContext.TemplateConfiguration.Subject
             
             $sendMailBody = @{
