@@ -1,0 +1,83 @@
+[
+  {
+    "defaultValue": "rawhtml",
+    "hide": false,
+    "key": "scriptFlow",
+    "templateOptions": {
+      "disabled": true,
+      "label": "Script flow"
+    },
+    "type": "input"
+  },
+  {
+    "defaultValue": "geenantwoord-iam@zorgnh.nl",
+    "key": "MailFrom",
+    "templateOptions": {
+      "description": "The sender email address. Must be an existing mailbox (user or shared) in Office 365 with send permissions.",
+      "label": "From",
+      "placeholder": "Enter sender email address. Needs to be an existing mailbox in Office 365 (can be shared mailbox)",
+      "required": true,
+      "type": "email"
+    },
+    "type": "input"
+  },
+  {
+    "defaultValue": "{{ Person.Contact.Personal.Email || \"fallbackMail\" }}",
+    "key": "MailTo",
+    "templateOptions": {
+      "description": "Multiple email addresses can be configured by separating them with semicolons (;)",
+      "label": "To",
+      "placeholder": "Enter email address, for multiple email addresses use ;",
+      "required": true,
+      "type": "email"
+    },
+    "type": "input"
+  },
+  {
+    "defaultValue": "",
+    "key": "MailCC",
+    "templateOptions": {
+      "description": "Multiple email addresses can be configured by separating them with semicolons (;)",
+      "label": "CC ",
+      "placeholder": "Enter a cc email address, for multiple email addresses use ;",
+      "required": false,
+      "type": "email"
+    },
+    "type": "input"
+  },
+  {
+    "defaultValue": "",
+    "key": "MailBCC",
+    "templateOptions": {
+      "description": "Multiple email addresses can be configured by separating them with semicolons (;)",
+      "label": "BCC",
+      "placeholder": "Enter a bcc email address, for multiple email addresses use ;",
+      "required": false,
+      "type": "email"
+    },
+    "type": "input"
+  },
+  {
+    "defaultValue": "",
+    "key": "Subject",
+    "templateOptions": {
+      "description": "The email subject line. Supports HelloID template variables (e.g., {{ Person.Name.NickName }}).",
+      "label": "Subject",
+      "placeholder": "Enter email subject",
+      "required": true
+    },
+    "type": "input"
+  },
+  {
+    "defaultValue": "",
+    "key": "Body",
+    "templateOptions": {
+      "description": "The email body content in raw HTML format. Supports HelloID template variables. Maximum 2063 characters.",
+      "label": "Message",
+      "placeholder": "Enter email message (raw html)",
+      "required": true,
+      "rows": 10
+    },
+    "type": "textarea"
+  }
+]

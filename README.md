@@ -1,106 +1,162 @@
-| :warning: Warning |
-|:---------------------------|
-| Please be aware that the current notifications only can be triggered by built-in events.  |
+# HelloID-Conn-Prov-Notification-Microsoft-Graph
 
-> [!IMPORTANT]
-> 
-> See powershell notification system for more information (https://docs.helloid.com/en/provisioning/notifications--provisioning-/notification-systems--provisioning-/powershell-notification-systems--provisioning-.html)
-> 
-| :information_source: Information |
-|:---------------------------|
-| This repository contains the connector and configuration code only. The implementer is responsible to acquire the connection details such as username, password, certificate, etc. You might even need to sign a contract or agreement with the supplier before implementing this connector. Please contact the client's application manager to coordinate the connector requirements.       |
-<br />
+| :information_source: Important |
+|:---| 
+| Please be aware that the notifications only can be triggered by [events](https://docs.helloid.com/en/provisioning/notifications--provisioning-/notification-events--provisioning-.html) and cannot be used as entitlements. |
+
+| :information_source: Important |
+|:---|
+| This repository contains the connector and configuration code only. The implementer is responsible to acquire the connection details such as username, password, certificate, etc. You might even need to sign a contract or agreement with the supplier before implementing this connector. Please contact the client's application manager to coordinate the connector requirements. |
+
 <p align="center">
-  <img src="https://www.tools4ever.nl/connector-logos/azureactivedirectory-logo.png">
+  <img src="https://raw.githubusercontent.com/Tools4everBV/HelloID-Conn-Prov-Notification-Microsoft-Graph/refs/heads/main/Logo.png">
 </p>
 
-## Versioning
-| Version | Description | Date |
-| - | - | - |
-| 1.0.0   | Initial release | 2021/07/30  |
+## Table of contents
 
-<!-- TABLE OF CONTENTS -->
-## Table of Contents
-- [Versioning](#versioning)
-- [Table of Contents](#table-of-contents)
-- [Introduction](#introduction)
-- [Getting the Azure AD graph API access](#getting-the-azure-ad-graph-api-access)
-  - [Application Registration](#application-registration)
-  - [Configuring App Permissions](#configuring-app-permissions)
-  - [Authentication and Authorization](#authentication-and-authorization)
-  - [Connection settings](#connection-settings)
-- [Remarks](#remarks)
-- [Getting help](#getting-help)
-- [HelloID Docs](#helloid-docs)
+- [HelloID-Conn-Prov-Notification-Microsoft-Graph](#helloid-conn-prov-notification-microsoft-graph)
+  - [Table of contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Getting started](#getting-started)
+    - [HelloID Icon URL](#helloid-icon-url)
+    - [Requirements](#requirements)
+    - [Connection settings](#connection-settings)
+    - [Templates](#templates)
+      - [rawhtml](#rawhtml)
+  - [Remarks](#remarks)
+    - [HTML email template](#html-email-template)
+    - [Sender mailbox requirements](#sender-mailbox-requirements)
+  - [Getting help](#getting-help)
+  - [HelloID docs](#helloid-docs)
 
 ## Introduction
-The interface to communicate with Microsoft Azure AD is through the Microsoft Graph API.
 
-For this connector we have the option to correlate to existing Azure AD users and provision (dynamic) groupmemberships.
-  >__Currently only Microsoft 365 and Security groups are supported by the [Microsoft Graph API](https://docs.microsoft.com/en-us/graph/api/resources/groups-overview?view=graph-rest-1.0).<br>
-This means we cannot manage Mail-enabled security groups and Distribution groups, These can only be managed using the [Exchange Online connector](https://github.com/Tools4everBV/HelloID-Conn-Prov-Target-ExchangeOnline).__
+HelloID-Conn-Prov-Notification-Microsoft-Graph is a notification connector. Microsoft Graph provides a set of REST APIs that allow you to programmatically interact with its data. The [Microsoft Graph Mail API documentation](https://learn.microsoft.com/en-us/graph/api/user-sendmail) provides details of API commands that are used.
 
-If you want to create Azure accounts, please use the built-in Microsoft Azure Active Directory target system.
+This connector sends email notifications through Microsoft 365 using the Microsoft Graph API. The connector supports rich HTML email templates with customizable styling and HelloID template variables for dynamic content.
 
-<!-- GETTING STARTED -->
-## Getting the Azure AD graph API access
+## Getting started
 
-By using this connector you will have the ability to manage Azure AD Guest accounts.
+### HelloID Icon URL
 
-### Application Registration
-The first step to connect to Graph API and make requests, is to register a new <b>Azure Active Directory Application</b>. The application is used to connect to the API and to manage permissions.
+URL of the icon used for the HelloID Provisioning notification system.
 
-* Navigate to <b>App Registrations</b> in Azure, and select “New Registration” (<b>Azure Portal > Azure Active Directory > App Registration > New Application Registration</b>).
-* Next, give the application a name. In this example we are using “<b>HelloID PowerShell</b>” as application name.
-* Specify who can use this application (<b>Accounts in this organizational directory only</b>).
-* Specify the Redirect URI. You can enter any url as a redirect URI value. In this example we used http://localhost because it doesn't have to resolve.
-* Click the “<b>Register</b>” button to finally create your new application.
+```
+https://raw.githubusercontent.com/Tools4everBV/HelloID-Conn-Prov-Notification-Microsoft-Graph/refs/heads/main/Icon.png
+```
 
-Some key items regarding the application are the Application ID (which is the Client ID), the Directory ID (which is the Tenant ID) and Client Secret.
+### Requirements
 
-### Configuring App Permissions
-The [Microsoft Graph documentation](https://docs.microsoft.com/en-us/graph) provides details on which permission are required for each permission type.
+Before implementing this connector, ensure the following requirements are met:
 
-To assign your application the right permissions, navigate to <b>Azure Portal > Azure Active Directory >App Registrations</b>.
-Select the application we created before, and select “<b>API Permissions</b>” or “<b>View API Permissions</b>”.
-To assign a new permission to your application, click the “<b>Add a permission</b>” button.
-From the “<b>Request API Permissions</b>” screen click “<b>Microsoft Graph</b>”.
-For this connector the following permissions are used as <b>Application permissions</b>:
-*	Allow the app to send mail by using <b><i>Mail.Send</i></b>
+**Microsoft Entra ID (Azure AD) Requirements:**
 
-Some high-privilege permissions can be set to admin-restricted and require an administrators consent to be granted.
+- **App Registration** in Microsoft Entra ID with the following configuration:
+  - **Application (client) ID** - Provided by Microsoft Entra ID after app registration
+  - **Directory (tenant) ID** - The tenant ID of your Microsoft 365 organization
+  - **Client Secret** - Created in the app registration for authentication
+  
+- **API Permissions** configured on the App Registration:
+  - **Microsoft Graph: Application permissions**:
+    - `Mail.Send` - Required to send emails on behalf of any user
 
-To grant admin consent to our application press the “<b>Grant admin consent for TENANT</b>” button.
+| :memo: Note |
+|:---|
+| Application permissions allow the connector to send emails from any mailbox without user interaction. Ensure the app registration is secured and only accessible by authorized administrators. |
 
-### Authentication and Authorization
-There are multiple ways to authenticate to the Graph API with each has its own pros and cons, in this example we are using the Authorization Code grant type.
+**Mailbox Requirements:**
 
-*	First we need to get the <b>Client ID</b>, go to the <b>Azure Portal > Azure Active Directory > App Registrations</b>.
-*	Select your application and copy the Application (client) ID value.
-*	After we have the Client ID we also have to create a <b>Client Secret</b>.
-*	From the Azure Portal, go to <b>Azure Active Directory > App Registrations</b>.
-*	Select the application we have created before, and select "<b>Certificates and Secrets</b>". 
-*	Under “Client Secrets” click on the “<b>New Client Secret</b>” button to create a new secret.
-*	Provide a logical name for your secret in the Description field, and select the expiration date for your secret.
-*	It's IMPORTANT to copy the newly generated client secret, because you cannot see the value anymore after you close the page.
-*	At last we need to get the <b>Tenant ID</b>. This can be found in the Azure Portal by going to <b>Azure Active Directory > Overview</b>.
+- The sender email address (`MailFrom`) must be an existing mailbox in Microsoft 365
+- The mailbox can be a user mailbox or a shared mailbox
+- The mailbox must be licensed (Exchange Online license required)
+
+**HelloID Environment:**
+
+- HelloID environment configured
+- HelloID Provisioning agent installed (cloud or on-premises)
+
+| :bulb: Tip |
+|:---|
+| For more information on creating an App Registration in Microsoft Entra ID, please refer to the [Microsoft documentation](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app). |
 
 ### Connection settings
+
 The following settings are required to connect to the API.
 
-| Setting     | Description |
-| ------------ | ----------- |
-| Azure AD Tenant ID | Id of the Azure tenant |
-| Azure AD App ID | Id of the Azure app |
-| Azure AD App Secret | Secret of the Azure app |
+| Setting                                  | Description                                                                                         | Mandatory | Example                                  |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------- | --------- | ---------------------------------------- |
+| App Registration Directory (tenant) ID   | The Directory (tenant) ID of your Microsoft 365 organization. Found in the app registration overview. | Yes       | 12345678-1234-1234-abcd-123456789abc     |
+| App Registration Application (client) ID | The Application (client) ID of the app registration. Found in the app registration overview.        | Yes       | 9c15a9b1-2175-678d-1234-8a790199d46d     |
+| App Registration Client Secret           | The client secret value created in the app registration certificates & secrets section.              | Yes       | (secret value)                           |
+
+### Templates
+
+#### rawhtml
+
+To create a notification using HTML email, use the following template: [template_rawhtml.json](https://github.com/Tools4everBV/HelloID-Conn-Prov-Notification-Microsoft-Graph/blob/main/template_rawhtml.json).
+
+The table below describes the different form fields from the template.
+
+| Template Key | Description                                                                                                                     | Mandatory | Example                                  |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------------------------------------- |
+| scriptFlow   | Fixed value `rawhtml` (read-only)                                                                                               | Yes       | rawhtml                                  |
+| MailFrom     | The sender email address. Must be an existing mailbox (user or shared) in Microsoft 365 with send permissions.                  | Yes       | noreply@company.com                      |
+| MailTo       | Recipient email address(es). Multiple addresses can be separated with semicolons (`;`). Supports HelloID template variables.    | Yes       | user@company.com;manager@company.com     |
+| MailCC       | CC recipient email address(es). Multiple addresses can be separated with semicolons (`;`). Supports HelloID template variables. | No        | team@company.com                         |
+| MailBCC      | BCC recipient email address(es). Multiple addresses can be separated with semicolons (`;`). Supports HelloID template variables.| No        | audit@company.com                        |
+| Subject      | The email subject line. Supports HelloID template variables.                                                                    | Yes       | New Account - {{ person.name.nickName }} |
+| Body         | The email body content in raw HTML format. Supports HelloID template variables. Maximum 2063 characters.                        | Yes       | `<p>Hello {{ person.primaryManager.displayName }},</p>` |
+
+| :bulb: Tip |
+|:---|
+| It is possible to hide or disable (make them read-only) certain form fields if they are not used or should not be changed. For example, if the sender address should always be `noreply@company.com`, you can set `"disabled": true` and `"hide": true` in the template configuration. |
+
+| :memo: Note |
+|:---|
+| The `Body` textarea has a performance limit of 2063 characters. |
 
 ## Remarks
-- 
+
+### HTML email template
+
+The connector includes a built-in HTML email template with professional styling. The template features:
+
+- Responsive design optimized for desktop and mobile email clients
+- Company logo (configurable via HelloID branding settings)
+- Clean header with blue accent color (#4a8fca)
+- Professional typography using Ubuntu/Helvetica/Arial fonts
+- Proper email structure with MIME types for maximum compatibility
+
+The template uses two placeholders that are automatically replaced:
+
+- `{{template-title}}` - Replaced with the configured `Subject`
+- `{{template-text}}` - Replaced with the configured `Body` (raw HTML content)
+
+| :bulb: Tip |
+|:---|
+| The Body field accepts raw HTML, allowing you to use formatting like `<p>`, `<strong>`, `<br>`, `<ul>`, `<li>`, etc. The built-in template provides the outer email structure, while you control the main content area. |
+
+### Sender mailbox requirements
+
+The Microsoft Graph API requires that the sender email address (`MailFrom`) corresponds to an actual mailbox in Microsoft 365:
+
+- **User mailboxes**: Regular user accounts with Exchange Online licenses
+- **Shared mailboxes**: Shared mailboxes are supported and recommended for notification scenarios
+
+| :memo: Note |
+|:---|
+| Unlike SMTP-based solutions, Microsoft Graph does not support sending from arbitrary email addresses. The sender must be a real mailbox in your organization. |
+
+| :bulb: Tip |
+|:---|
+| For notification scenarios, we recommend using a shared mailbox (e.g., `noreply@company.com` or `helloid@company.com`) rather than a personal user mailbox. |
 
 ## Getting help
-> _For more information on how to configure a HelloID PowerShell connector, please refer to our [documentation](https://docs.helloid.com/hc/en-us/articles/360012518799-How-to-add-a-target-system) pages_
 
-> _If you need help, feel free to ask questions on our [forum](https://forum.helloid.com)_
+| :bulb: Tip |
+|:---|
+| For more information on how to configure a HelloID PowerShell notification connector, please refer to our [documentation](https://docs.helloid.com/en/provisioning/notifications--provisioning-/notification-systems--provisioning-/powershell-notification-systems--provisioning-/add,-edit,-or-remove-a-powershell-notification-system.html) pages. |
 
-## HelloID Docs
+## HelloID docs
+
 The official HelloID documentation can be found at: https://docs.helloid.com/
