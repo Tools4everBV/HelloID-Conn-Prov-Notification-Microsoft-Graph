@@ -42,7 +42,7 @@ This connector sends email notifications through Microsoft 365 using the Microso
 URL of the icon used for the HelloID Provisioning notification system.
 
 ```
-https://raw.githubusercontent.com/Tools4everBV/HelloID-Conn-Prov-Notification-Microsoft-Graph/refs/heads/main/Logo.png
+https://raw.githubusercontent.com/Tools4everBV/HelloID-Conn-Prov-Notification-Microsoft-Graph/refs/heads/main/Icon.png
 ```
 
 ### Requirements
